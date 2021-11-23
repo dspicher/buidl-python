@@ -466,7 +466,7 @@ class PSBTTest(TestCase):
         )
         pubkey_lookup = {}
         for i in range(6):
-            root_path = "m/0'/0'/{}'".format(i)
+            root_path = f"m/0'/0'/{i}'"
             named_pubkey = NamedHDPublicKey.from_hd_priv(
                 root_hd_priv=hd_priv, path=root_path
             )

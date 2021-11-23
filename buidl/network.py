@@ -331,7 +331,7 @@ class SimpleNode:
             message.command, message.serialize(), network=self.network
         )
         if self.logging:
-            print("sending: {}".format(envelope))
+            print(f"sending: {envelope}")
         # send the serialized envelope over the socket using sendall
         self.socket.sendall(envelope.serialize())
 
@@ -339,7 +339,7 @@ class SimpleNode:
         """Read a message from the socket"""
         envelope = NetworkEnvelope.parse(self.stream, network=self.network)
         if self.logging:
-            print("receiving: {}".format(envelope))
+            print(f"receiving: {envelope}")
         return envelope
 
     def wait_for(self, *message_classes):

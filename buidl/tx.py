@@ -55,7 +55,7 @@ class TxFetcher:
             try:
                 raw = bytes.fromhex(response)
             except ValueError:
-                raise ValueError("unexpected response: {}".format(response))
+                raise ValueError(f"unexpected response: {response}")
             tx = Tx.parse(BytesIO(raw), network=network)
             # make sure the tx we got matches to the hash we requested
             if tx.segwit:
@@ -63,7 +63,7 @@ class TxFetcher:
             else:
                 computed = hash256(raw)[::-1].hex()
             if computed != tx_id:
-                raise RuntimeError("server lied: {} vs {}".format(computed, tx_id))
+                raise RuntimeError(f"server lied: {computed} vs {tx_id}")
             cls.cache[tx_id] = tx
         cls.cache[tx_id].network = network
         return cls.cache[tx_id]
@@ -186,7 +186,7 @@ class Tx:
         # next two bytes need to be 0x00 and 0x01, otherwise raise RuntimeError
         marker = s.read(2)
         if marker != b"\x00\x01":
-            raise RuntimeError("Not a segwit transaction {}".format(marker))
+            raise RuntimeError(f"Not a segwit transaction {marker}")
         # num_inputs is a varint, use read_varint(s)
         num_inputs = read_varint(s)
         # each input needs parsing, create inputs array
@@ -774,10 +774,7 @@ class TxIn:
         self.witness = Witness()
 
     def __repr__(self):
-        return "{}:{}".format(
-            self.prev_tx.hex(),
-            self.prev_index,
-        )
+        return "{self.prev_tx.hex()}:{self.prev_index}"
 
     @classmethod
     def parse(cls, s):
@@ -885,7 +882,7 @@ class TxOut:
         self.script_pubkey = script_pubkey
 
     def __repr__(self):
-        return "{}:{}".format(self.amount, self.script_pubkey)
+        return f"{self.amount}:{self.script_pubkey}"
 
     def serialize(self):
         """Returns the byte serialization of the transaction output"""
